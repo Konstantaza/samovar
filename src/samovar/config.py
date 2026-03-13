@@ -210,7 +210,12 @@ else
 fi
 
 out_dir="{base_dir}"
-mkdir -p $out_dir
+mkdir -p $out_dir/initial
+
+# Creating symbolic links to the source reads
+if [ -d "{self.input_dir}" ]; then
+    ln -sf $(readlink -f {self.input_dir}/*_R*.fastq) $out_dir/initial/ 2>/dev/null || cp {self.input_dir}/*_R*.fastq $out_dir/initial/
+fi
 
 # Run annotators on initial reads
 snakemake -s workflow/annotators/Snakefile \\
